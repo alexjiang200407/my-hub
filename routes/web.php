@@ -13,6 +13,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get(uri: '', action: 'HomeController@index');
+
+Route::get(uri: 'login', action: 'LoginController@index');
+
+Route::get(uri:'login/auth', action:'LoginController@auth');
+
+Route::get(uri: '/{id}', action: 'HomeController@index');
