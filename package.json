@@ -3,7 +3,27 @@
     "private": true,
     "type": "module",
     "scripts": {
+        "dev": "nuxt dev",
+        "build": "nuxt build",
+        "analyze": "nuxt build --analyze",
+        "generate": "nuxt generate",
+        "start": "nuxt start"
     },
     "devDependencies": {
+        "nuxt": "^3.8.2",
+        "typescript": "^5.3.3",
+        "vue-tsc": "^1.8.25"
+    },
+    "dependencies": {
+        "@fortawesome/fontawesome-svg-core": "^6.5.1",
+        "@fortawesome/free-brands-svg-icons": "^6.5.1",
+        "@fortawesome/free-regular-svg-icons": "^6.5.1",
+        "@fortawesome/free-solid-svg-icons": "^6.5.1",
+        "@fortawesome/vue-fontawesome": "^3.0.5",
+        "@nuxt/types": "^2.17.2",
+        "@nuxtjs/fontawesome": "^1.1.2",
+        "@types/node": "^20.10.4",
+        "bulma": "^0.9.4",
+        "vue-facing-decorator": "^3.0.4"
     }
 }
