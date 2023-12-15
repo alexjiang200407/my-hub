@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,4 +13,4 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get(uri: "test", action: "UserController@data");
+Route::get(uri: '/{userId}/reminders', action: 'UserController@getReminders');

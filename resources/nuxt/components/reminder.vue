@@ -7,7 +7,7 @@
             <header  class="card-header">
                 <div class="field">
                     <div class="control card-header-title">
-                      <input v-model="data.header" ref="titleInput" required maxlength="256" class="input" type="text" placeholder="Title">
+                      <input v-model="data.title" ref="titleInput" required maxlength="256" class="input" type="text" placeholder="Title">
                     </div>
                 </div>
             </header>
@@ -29,7 +29,7 @@
     <div v-else class="card reminder">
         <header class="card-header">
             <p class="card-header-title">
-                {{ data.header }}
+                {{ data.title }}
             </p>
             <button class="card-header-icon" aria-label="more options">
                 <span class="icon" @click="changeContentVisibility">
@@ -48,7 +48,7 @@
                       <a href="#" v-for="tag in data.tags">#{{tag}}</a>
                   </div>
                   <div class="rows-is-full">
-                      <time datetime="2016-1-1">{{ data.timestamp }}</time>
+                      <time>{{ data.timestamp }}</time>
                   </div>
                   </div>
               </div>
@@ -67,7 +67,7 @@ import ReminderManager from '../pages/index.vue';
 
 export interface DefineReminder 
 {
-    header?: string,
+    title?: string,
     id: string,
     isEdit: boolean,
     timestamp?: string,
@@ -91,8 +91,11 @@ export default class Reminder extends Vue
 
     mounted()
     {
-        // Focus on the title
-        this.title.focus();
+        // Focus on the title if is editing
+        if (this.data.isEdit)
+        {
+            this.title.focus();
+        }
     }
 
     // Saves the reminder

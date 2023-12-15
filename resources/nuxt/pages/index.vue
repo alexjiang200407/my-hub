@@ -17,6 +17,13 @@
 import { Vue, Component } from "vue-facing-decorator";
 import Reminder, { DefineReminder } from "../components/reminder.vue";
 
+export interface ReminderJsonData
+{
+    reminderC: number,
+    reminders: DefineReminder[]
+};
+
+
 @Component({ components: { Reminder } })
 export default class ReminderManager extends Vue {
 
@@ -25,8 +32,13 @@ export default class ReminderManager extends Vue {
     async created()
     {
         // Get the reminders from the server
-        const data = await $fetch('http://localhost:8000/api/test');
+        const data : ReminderJsonData = await $fetch('http://localhost:8000/api/13458/reminders');
         console.log(data);
+
+        for (let i : number = 0; i < data.reminderC; i++)
+        {
+            this.reminders.push(data.reminders[i]);
+        }
     }
     
     addReminder() 
