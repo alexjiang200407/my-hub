@@ -22,9 +22,11 @@ export default class ReminderManager extends Vue {
 
     reminders : DefineReminder[] = [];
 
-    mounted()
+    async created()
     {
         // Get the reminders from the server
+        const data = await $fetch('http://localhost:8000/api/test');
+        console.log(data);
     }
     
     addReminder() 
