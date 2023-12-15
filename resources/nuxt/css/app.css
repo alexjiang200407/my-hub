@@ -8,7 +8,7 @@ body {
 }
 
 section {
-    min-width: 45vw;
+    max-width: 85vw;
     padding: 1em;
 }
 
@@ -20,5 +20,9 @@ section {
 }
 
 .is-icon-button:hover {
-    margin-bottom: 1em;
+    transform: translateY(-1em);
+}
+
+.hidden {
+    display: none;
 }
