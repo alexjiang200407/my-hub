@@ -4,9 +4,9 @@ export default {
     head: {
         title: 'myHub',
         meta: [
-            {charset: 'utf-8'},
-            {name:'viewport', content:'width-device-width, initial-scale=10'},
-            {hid: 'description', name:'description', content: 'For people with lots of fridges and shit'}
+            { charset: 'utf-8' },
+            { name:'viewport', content:'width-device-width, initial-scale=10' },
+            { hid: 'description', name:'description', content: '' }
         ]
     },
     css: [
@@ -16,7 +16,7 @@ export default {
     plugins: ['~/plugins/fontawesome.js'],
     components: true,
     buildModules: ['@nuxtjs/fontawesome', '@nuxt/typescript-build'],
-    modules: [],
+    modules: ['@nuxtjs/axios'],
     build: {
         publicPath: process.env.NODE_ENV === 'production' ? 'assets/' : null,
         extractCSS: true,
