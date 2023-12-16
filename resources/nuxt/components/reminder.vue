@@ -63,19 +63,8 @@
 <script lang="ts">
 
 import { Vue, Component, Ref, Prop } from 'vue-facing-decorator';
-import ReminderManager from '../pages/index.vue';
-
-export interface DefineReminder 
-{
-    title?: string,
-    id: string,
-    isEdit: boolean,
-    timestamp?: string,
-    content?: string,
-    tags?: string[], 
-    manager: ReminderManager,
-    collapseContent: boolean
-};
+import { DefineReminder } from '../types/reminder';
+import { useReminderStore } from "../store/reminderStore"
 
 @Component
 export default class Reminder extends Vue
@@ -88,6 +77,7 @@ export default class Reminder extends Vue
     @Ref('titleInput')
     title!: HTMLInputElement;
 
+    store = useReminderStore();
 
     mounted()
     {
@@ -125,7 +115,7 @@ export default class Reminder extends Vue
 
     deleteReminder()
     {
-        this.data.manager.deleteReminder(this.data);
+        this.store.removeReminder(this.data);
     }
 
     changeContentVisibility()

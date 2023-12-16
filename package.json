@@ -22,8 +22,13 @@
         "@fortawesome/vue-fontawesome": "^3.0.5",
         "@nuxt/types": "^2.17.2",
         "@nuxtjs/fontawesome": "^1.1.2",
+        "@pinia/nuxt": "^0.5.1",
         "@types/node": "^20.10.4",
         "bulma": "^0.9.4",
+        "pinia": "^2.1.7",
         "vue-facing-decorator": "^3.0.4"
+    },
+    "overrides": {
+        "vue": "latest"
     }
 }

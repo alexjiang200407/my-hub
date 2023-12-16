@@ -16,7 +16,9 @@ export default {
     plugins: ['~/plugins/fontawesome.js'],
     components: true,
     buildModules: ['@nuxtjs/fontawesome', '@nuxt/typescript-build'],
-    modules: [],
+    modules: [
+        '@pinia/nuxt',
+    ],
     build: {
         publicPath: process.env.NODE_ENV === 'production' ? 'assets/' : null,
         extractCSS: true,

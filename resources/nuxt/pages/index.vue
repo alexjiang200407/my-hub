@@ -2,7 +2,7 @@
 <template>
     <section>
         <h1 class="title">Reminders</h1>
-        <reminder v-for="data in reminders" :data ="data" />
+        <reminder v-for="data in store.$state" :data ="data" />
 
         <button class="is-icon-button is-large is-rounded" id="add-reminder-button" @click="addReminder">
         <span class="icon">
@@ -15,7 +15,9 @@
 <script lang="ts">
 
 import { Vue, Component } from "vue-facing-decorator";
-import Reminder, { DefineReminder } from "../components/reminder.vue";
+import Reminder from "../components/reminder.vue";
+import { DefineReminder } from "../types/reminder"
+import { useReminderStore } from "../store/reminderStore"
 
 export interface ReminderJsonData
 {
@@ -24,31 +26,28 @@ export interface ReminderJsonData
 };
 
 
-@Component({ components: { Reminder } })
-export default class ReminderManager extends Vue {
 
-    reminders : DefineReminder[] = [];
+
+@Component({ components: { Reminder } })
+export default class ReminderManager extends Vue 
+{
+    store = useReminderStore();
 
     async created()
     {
         // Get the reminders from the server
         const data : ReminderJsonData = await $fetch('http://localhost:8000/api/13458/reminders');
-        console.log(data);
-
-        for (let i : number = 0; i < data.reminderC; i++)
-        {
-            this.reminders.push(data.reminders[i]);
-        }
+        this.store.setReminders(data.reminders);
     }
     
     addReminder() 
     {
+        // TODO
         // Get an id from the server
 
-        this.reminders.push({
+        this.store.$state.push({
             isEdit: true,
-            id: this.reminders.length.toString(),
-            manager: this,
+            id: "fuck me",
             collapseContent: false
         });
     }
@@ -56,8 +55,7 @@ export default class ReminderManager extends Vue {
     deleteReminder(toDelete : DefineReminder)
     {
         // Remove reminder from client side
-        const index : number = this.reminders.indexOf(toDelete);
-        this.reminders.splice(index, 1);
+        this.store.removeReminder(toDelete);
 
         // Tell database to remove the reminder as well
     }
