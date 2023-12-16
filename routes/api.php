@@ -13,4 +13,4 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get(uri: '/{userId}/reminders', action: 'UserController@getReminders');
+Route::get(uri: '/{userId}/reminders', action: 'RemindersController@retrieve');

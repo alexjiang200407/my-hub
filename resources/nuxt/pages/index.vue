@@ -2,7 +2,7 @@
 <template>
     <section>
         <h1 class="title">Reminders</h1>
-        <reminder v-for="data in store.$state" :data ="data" />
+        <reminder v-for="data in store.reminders" :data ="data" />
 
         <button class="is-icon-button is-large is-rounded" id="add-reminder-button" @click="addReminder">
         <span class="icon">
@@ -19,15 +19,6 @@ import Reminder from "../components/reminder.vue";
 import { DefineReminder } from "../types/reminder"
 import { useReminderStore } from "../store/reminderStore"
 
-export interface ReminderJsonData
-{
-    reminderC: number,
-    reminders: DefineReminder[]
-};
-
-
-
-
 @Component({ components: { Reminder } })
 export default class ReminderManager extends Vue 
 {
@@ -35,17 +26,14 @@ export default class ReminderManager extends Vue
 
     async created()
     {
-        // Get the reminders from the server
-        const data : ReminderJsonData = await $fetch('http://localhost:8000/api/13458/reminders');
-        this.store.setReminders(data.reminders);
+        await this.store.refreshReminders();
     }
     
     addReminder() 
     {
         // TODO
         // Get an id from the server
-
-        this.store.$state.push({
+        this.store.pushReminder({
             isEdit: true,
             id: "fuck me",
             collapseContent: false
