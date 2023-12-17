@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 
-use App\Models\Reminder;
+use App\Models\Post;
 use App\Models\Tag;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -23,24 +23,24 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
 
-        Reminder::factory()->create([
+        Post::factory()->create([
             "userId" => 1
         ]);
 
-        Reminder::factory()->create([
+        Post::factory()->create([
             "userId" => 1
         ]);
 
         Tag::factory()->create([
-            "reminderId" => 1,
+            "postId" => 1,
             "tag" => "fart"
         ]);
         Tag::factory()->create([
-            "reminderId" => 2,
+            "postId" => 2,
             "tag" => "bb"
         ]);
         Tag::factory()->create([
-            "reminderId" => 2,
+            "postId" => 2,
             "tag" => "shit"
         ]);
     }

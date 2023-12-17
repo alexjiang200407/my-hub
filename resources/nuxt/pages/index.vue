@@ -1,10 +1,11 @@
 
 <template>
-    <section>
-        <h1 class="title">Reminders</h1>
-        <reminder v-for="data in store.reminders" :data ="data" />
+    <Navbar />
+    <section id="profile">
+        <h1 class="title">My Profile</h1>
+        <post v-for="data in store.posts" :data ="data" />
 
-        <button class="is-icon-button is-large is-rounded" id="add-reminder-button" @click="addReminder">
+        <button class="is-icon-button is-large is-rounded" id="add-post-button" @click="addPost">
         <span class="icon">
             <font-awesome-icon :icon="['fas', 'plus']" />
         </span>
@@ -15,37 +16,38 @@
 <script lang="ts">
 
 import { Vue, Component } from "vue-facing-decorator";
-import Reminder from "../components/reminder.vue";
-import { DefineReminder } from "../types/reminder"
-import { useReminderStore } from "../store/reminderStore"
+import Post from "../components/post.vue";
+import { DefinePost } from "../types/post"
+import Navbar from "../components/navbar.vue"
+import { usePostStore } from "../store/postStore"
 
-@Component({ components: { Reminder } })
-export default class ReminderManager extends Vue 
+@Component({ components: { Post, Navbar } })
+export default class PostManager extends Vue 
 {
-    store = useReminderStore();
+    store = usePostStore();
 
     async created()
     {
-        await this.store.refreshReminders();
+        await this.store.refreshPosts();
     }
     
-    addReminder() 
+    addPost() 
     {
         // TODO
         // Get an id from the server
-        this.store.pushReminder({
+        this.store.pushPost({
             isEdit: true,
             id: "fuck me",
             collapseContent: false
         });
     }
 
-    deleteReminder(toDelete : DefineReminder)
+    deletePost(toDelete : DefinePost)
     {
-        // Remove reminder from client side
-        this.store.removeReminder(toDelete);
+        // Remove post from client side
+        this.store.removePost(toDelete);
 
-        // Tell database to remove the reminder as well
+        // Tell database to remove the post as well
     }
 
 }
@@ -55,11 +57,16 @@ export default class ReminderManager extends Vue
 <style>
 @import 'bulma/css/bulma.css';
 
-#add-reminder-button {
+#add-post-button {
     position: fixed;
-    bottom: 10vh;
+    bottom: 3em;
     right: 5vh;
     border: none;
+}
+
+#profile {
+    width: 40em;
+    margin-top: 2em;
 }
 
 </style>

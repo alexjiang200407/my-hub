@@ -10,8 +10,8 @@ class Tag extends Model
     use HasFactory;
     protected $fillable = ['tag', 'content'];  
 
-    public function reminder()
+    public function post()
     {
-        return $this->belongsTo(Reminder::class);
+        return $this->belongsTo(Post::class);
     }
 }

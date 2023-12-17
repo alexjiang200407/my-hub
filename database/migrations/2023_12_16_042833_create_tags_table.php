@@ -13,13 +13,13 @@ return new class extends Migration
     {
         Schema::create('tags', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('reminderId')->unsigned();
+            $table->bigInteger('postId')->unsigned();
             $table->string('tag');
             $table->timestamps();
 
-            $table->foreign('reminderId')->references('id')->on('reminders')
+            $table->foreign('postId')->references('id')->on('posts')
                 ->onDelete('cascade');
-            // $table->unique(['reminderId','tag']);
+            // $table->unique(['postId','tag']);
         });
     }
 

@@ -1,5 +1,5 @@
 
-export interface DefineReminder 
+export interface DefinePost 
 {
     title?: string,
     id: string,

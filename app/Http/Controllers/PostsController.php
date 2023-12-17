@@ -2,37 +2,37 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Reminder;
+use App\Models\Post;
 use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class RemindersController extends Controller
+class PostsController extends Controller
 {
     public function retrieve()
     {
-        $reminders = Reminder::all();
+        $posts = Post::all();
         $output = [];
 
-        foreach ($reminders as $reminder) {
-            $temp = $reminder->toArray();
-            $reminder_data = [
+        foreach ($posts as $post) {
+            $temp = $post->toArray();
+            $post_data = [
                 "title" => $temp["title"],
                 "content" => $temp["content"],
                 "id" => $temp["id"],
                 "timestamp" => "FUCK"
             ];
-            $tags = DB::table("tags")->where("tags.reminderId","=", $reminder["id"])->get();
+            $tags = DB::table("tags")->where("tags.postId","=", $post["id"])->get();
             
             // Set the tags
             foreach ($tags as $tag) {
-                $reminder_data["tags"][] = $tag->tag;
+                $post_data["tags"][] = $tag->tag;
             }
-            $output[] = $reminder_data;
+            $output[] = $post_data;
         }
         return [
-            "remindersC" => $reminders->count(),
-            "reminders" => $output
+            "postsC" => $posts->count(),
+            "posts" => $output
         ];
     }
 }

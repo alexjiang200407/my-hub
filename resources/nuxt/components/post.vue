@@ -1,6 +1,6 @@
 <template>
-    <!-- Editing/Adding the reminder -->
-    <div v-if="data.isEdit" class="card reminder-edit">
+    <!-- Editing/Adding the post -->
+    <div v-if="data.isEdit" class="card post-edit">
 
         <!-- HTML form api for data validation -->
         <form ref="formElement">
@@ -20,13 +20,13 @@
                 </div>
             </div>
             <footer class="card-footer">
-                <a href="#" class="card-footer-item" @click="saveReminder">Save</a>
-                <a href="#" class="card-footer-item" @click="deleteReminder">Delete</a>
+                <a href="#" class="card-footer-item" @click="savePost">Save</a>
+                <a href="#" class="card-footer-item" @click="deletePost">Delete</a>
             </footer>
         </form>
     </div>
-    <!-- Reminder display -->
-    <div v-else class="card reminder">
+    <!-- Post display -->
+    <div v-else class="card post">
         <header class="card-header">
             <p class="card-header-title">
                 {{ data.title }}
@@ -40,7 +40,7 @@
         <div class="card-content" :class="{ collapse: data.collapseContent }">
             <div class="content">
               <div class="rows">
-                  <div class="reminder-text">
+                  <div class="post-text">
                       {{ data.content }}
                   </div>
                   <div class="rows-is-full">
@@ -54,8 +54,8 @@
               </div>
         </div>
         <footer class="card-footer">
-            <a href="#" class="card-footer-item" @click="editReminder">Edit</a>
-            <a href="#" class="card-footer-item" @click="deleteReminder">Delete</a>
+            <a href="#" class="card-footer-item" @click="editPost">Edit</a>
+            <a href="#" class="card-footer-item" @click="deletePost">Delete</a>
         </footer>
     </div>
 </template>
@@ -63,13 +63,13 @@
 <script lang="ts">
 
 import { Vue, Component, Ref, Prop } from 'vue-facing-decorator';
-import { DefineReminder } from '../types/reminder';
-import { useReminderStore } from "../store/reminderStore"
+import { DefinePost } from '../types/post';
+import { usePostStore } from "../store/postStore"
 
 @Component
-export default class Reminder extends Vue
+export default class Post extends Vue
 {
-    @Prop({ default: { id: 'invalid', isEdit: true } }) data! : DefineReminder;
+    @Prop({ default: { id: 'invalid', isEdit: true } }) data! : DefinePost;
 
     @Ref('formElement')
     form!: HTMLFormElement;
@@ -77,7 +77,7 @@ export default class Reminder extends Vue
     @Ref('titleInput')
     title!: HTMLInputElement;
 
-    store = useReminderStore();
+    store = usePostStore();
 
     mounted()
     {
@@ -88,8 +88,8 @@ export default class Reminder extends Vue
         }
     }
 
-    // Saves the reminder
-    saveReminder() 
+    // Saves the post
+    savePost() 
     {
         // Show prompts if invalid
         if (!this.form.reportValidity())
@@ -107,15 +107,15 @@ export default class Reminder extends Vue
 
     }
 
-    // Edits the reminder
-    editReminder() 
+    // Edits the post
+    editPost() 
     {
         this.data.isEdit = true;
     }
 
-    deleteReminder()
+    deletePost()
     {
-        this.store.removeReminder(this.data);
+        this.store.removePost(this.data);
     }
 
     changeContentVisibility()
@@ -129,59 +129,59 @@ export default class Reminder extends Vue
 <style>
 @import 'bulma/css/bulma.css';
 
-.card.reminder, .card.reminder-edit 
+.card.post, .card.post-edit 
 {
-    width: 35em;
+    width: 100%;
     margin-bottom: 2em;
 }
 
-.reminder-edit textarea 
+.post-edit textarea 
 {
     resize: none;
 }
 
-.reminder-edit .field 
+.post-edit .field 
 {
     width: 100%;
 }
 
-.reminder-edit 
+.post-edit 
 {
-    animation: reminder-create 0.2s ease-out;
+    animation: post-create 0.2s ease-out;
 }
 
-.reminder 
+.post 
 {
-    animation: reminder-bulge 0.3s ease-out;
+    animation: post-bulge 0.3s ease-out;
 }
 
-.reminder .card-content
+.post .card-content
 {
     transition: all 0.2s ease-out;
     overflow: hidden;
 }
 
-.reminder .reminder-text
+.post .post-text
 {
     text-overflow: ellipsis;    
     overflow: hidden;
 }
 
-.reminder .card-content.collapse 
+.post .card-content.collapse 
 {
     padding: 0;
     max-height: 0;
     opacity: 0;
 }
 
-@keyframes reminder-create 
+@keyframes post-create 
 {
     0% { transform: translateY(4em); opacity: 0; }
     75% { transform: translateY(-0.5em); opacity: 1;}
     100% { transform: translateY(0); }
 }
 
-@keyframes reminder-bulge 
+@keyframes post-bulge 
 {
     0% { transform: scale(1); opacity: 0.25; }
     50% { transform: scale(1.15);}
