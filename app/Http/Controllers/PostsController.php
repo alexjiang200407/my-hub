@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 class PostsController extends Controller
 {
     public function retrieve()
-    {
+    {       
         $posts = Post::all();
         $output = [];
 
@@ -20,7 +20,7 @@ class PostsController extends Controller
                 "title" => $temp["title"],
                 "content" => $temp["content"],
                 "id" => $temp["id"],
-                "timestamp" => "FUCK"
+                "timestamp" => $temp["created_at"]
             ];
             $tags = DB::table("tags")->where("tags.postId","=", $post["id"])->get();
             

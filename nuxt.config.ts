@@ -41,5 +41,10 @@ export default {
          solid: true,
          brands: true
         }
+    },
+    runtimeConfig: {
+        public: {
+            serverUrl: process.env.BACKEND_URL
+        }
     }
 }

@@ -25,20 +25,17 @@
             class="navbar-menu"
             :class="{ 'is-active': burgerIsOpen }"
         >
-            <div class="navbar-start">
-                <a class="navbar-item" href="/">
-                    Profile
-                </a>
-                <a class="navbar-item">
-                    Explore
-                </a>
-                <a class="navbar-item">
-                    Feed
-                </a>
-                <a class="navbar-item">
-                    Login / Register
-                </a>
+            <!-- If logged in -->
+            <div class="navbar-start" v-if="loggedIn">
+                <VueLink class="navbar-item" :to="'/'" :txt="'Profile'" />
+                <VueLink class="navbar-item" :to="'/'" :txt="'Explore'" />
+                <VueLink class="navbar-item" :to="'/'" :txt="'Logout'" />
             </div>
+
+            <!-- Not logged in -->
+            <div class="navbar-start" v-else>
+                <VueLink class="navbar-item" :to="'/login'" :txt="'Login / Register'" />
+            </div>  
             <div class="navbar-end"></div>
         </div>
 
@@ -47,11 +44,14 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-facing-decorator';
+import VueLink from './link.vue';
+import { useUserStore } from '../store/userStore';
 
-@Component({})
+@Component({ components: { VueLink } })
 export default class Navbar extends Vue
 {
     burgerIsOpen : boolean = false;
+    loggedIn = useUserStore().isLoggedIn;
 
     mounted()
     {

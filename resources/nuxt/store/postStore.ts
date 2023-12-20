@@ -7,7 +7,7 @@ export interface DefinePostsStore
     data: DefinePost[]
 }
 
-export interface PostJsonData
+export interface PostAPIData
 {
     postC: number,
     posts: DefinePost[]
@@ -37,7 +37,7 @@ export const usePostStore = defineStore({
         async refreshPosts()
         {
             // Get the posts from the server
-            const data : PostJsonData = await $fetch('http://localhost:8000/api/13458/posts');
+            const data : PostAPIData = await $fetch('http://localhost:8000/api/13458/posts');
             console.log(data)
             this.setPosts(data.posts);
         },

@@ -20,6 +20,7 @@ import Post from "../components/post.vue";
 import { DefinePost } from "../types/post"
 import Navbar from "../components/navbar.vue"
 import { usePostStore } from "../store/postStore"
+import Cookies from "js-cookie"
 
 @Component({ components: { Post, Navbar } })
 export default class PostManager extends Vue 
@@ -28,6 +29,17 @@ export default class PostManager extends Vue
 
     async created()
     {
+        let token : string = Cookies.get('accessToken') as string;
+        if (token === undefined)
+        {
+            console.log("Not logged in");
+            this.$router.push("/login");
+        }
+        else
+        {
+            console.log("Logged in ", token);
+        }
+
         await this.store.refreshPosts();
     }
     
