@@ -1,5 +1,6 @@
 <template>
-    <a :href="to" @click="goToLink">{{ txt }}</a>
+    <a v-if="to" :href="to" @click="goToLink">{{ txt }}</a>
+    <a v-else>{{ txt }}</a>
 </template>
 
 

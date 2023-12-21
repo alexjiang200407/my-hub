@@ -29,7 +29,7 @@
             <div class="navbar-start" v-if="loggedIn">
                 <VueLink class="navbar-item" :to="'/'" :txt="'Profile'" />
                 <VueLink class="navbar-item" :to="'/'" :txt="'Explore'" />
-                <VueLink class="navbar-item" :to="'/'" :txt="'Logout'" />
+                <VueLink class="navbar-item" :txt="'Logout'" @click="logOut"/>
             </div>
 
             <!-- Not logged in -->
@@ -43,7 +43,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-facing-decorator';
+import { Vue, Component, Watch } from 'vue-facing-decorator';
 import VueLink from './link.vue';
 import { useUserStore } from '../store/userStore';
 
@@ -51,7 +51,7 @@ import { useUserStore } from '../store/userStore';
 export default class Navbar extends Vue
 {
     burgerIsOpen : boolean = false;
-    loggedIn = useUserStore().isLoggedIn;
+    loggedIn : boolean | undefined = useUserStore().isLoggedIn;
 
     mounted()
     {
@@ -62,6 +62,27 @@ export default class Navbar extends Vue
     burgerToggle()
     {
         this.burgerIsOpen = !this.burgerIsOpen;
+    }
+
+
+    async logOut()
+    {
+        let success : boolean = await useUserStore().logOut();
+
+        if (success)
+        {
+            this.loggedIn = false;
+        }
+    }
+
+    @Watch("loggedIn")
+    loggedOut()
+    {
+        if (this.loggedIn === false)
+        {
+            console.log("logged out");
+            this.$router.push("/login");
+        }
     }
 }
 </script>

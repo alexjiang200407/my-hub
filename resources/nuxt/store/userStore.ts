@@ -5,7 +5,7 @@ import Cookies from "js-cookie";
 
 export interface DefineUsersStore
 {
-    data: DefineUser | null
+    data: DefineUser
 }
 
 
@@ -32,7 +32,8 @@ export const useUserStore = defineStore({
     id: 'user-store',
     state: () : DefineUsersStore => ({
         data: {
-            token: Cookies.get("accessToken")
+            token: Cookies.get("accessToken"),
+            isLoggedIn: Cookies.get("accessToken") !== undefined
         }
     }),
     actions: {
@@ -40,7 +41,7 @@ export const useUserStore = defineStore({
         {
             try
             {
-                let cookie : AuthJSONMsg = await $fetch("http://localhost:8000/api/auth/login", {
+                let response : AuthJSONMsg = await $fetch("http://localhost:8000/api/auth/login", {
                     method: "POST",
                     body: JSON.stringify({
                         email: email,
@@ -48,12 +49,13 @@ export const useUserStore = defineStore({
                     })
                 });
 
-                let payload : LoginJSONPayload = (cookie.payload as LoginJSONPayload);
+                let payload : LoginJSONPayload = (response.payload as LoginJSONPayload);
                 this.$state.data = {
                     token: payload.accessToken,
                     id: payload.id,
                     friends: [],
-                    username: payload.username
+                    username: payload.username,
+                    isLoggedIn: true
                 }
                 return payload.accessToken;
             }
@@ -66,7 +68,7 @@ export const useUserStore = defineStore({
         {
             try
             {
-                let cookie : AuthJSONMsg = await $fetch("http://localhost:8000/api/auth/register", {
+                let response : AuthJSONMsg = await $fetch("http://localhost:8000/api/auth/register", {
                     method: "POST",
                     body: JSON.stringify({
                         name: username,
@@ -75,7 +77,7 @@ export const useUserStore = defineStore({
                     })
                 });
 
-                if (cookie.message !== "Successfully created user!")
+                if (response.message !== "Successfully created user!")
                 {
                     return false;
                 }
@@ -86,10 +88,35 @@ export const useUserStore = defineStore({
             {
                 return false;
             }
+        },
+        async logOut() : Promise<boolean>
+        {
+            try
+            {
+                let response : AuthJSONMsg = await $fetch("http://localhost:8000/api/auth/logout", {
+                    method: "GET",
+                    headers: {
+                        accept: "application/json",
+                        authorization: `Bearer ${this.$state.data?.token}`
+                    }
+                });
+            }
+            catch (error)
+            {
+                console.error(error);
+                return false;
+            }
+
+            this.$state.data = {
+                isLoggedIn: false
+            };
+            Cookies.remove("accessToken");
+            
+            return true;
         }
     },
     getters: {
         user: (state) => state.data,
-        isLoggedIn: (state) => state.data?.token
+        isLoggedIn: (state) => state.data?.isLoggedIn
     }
 });

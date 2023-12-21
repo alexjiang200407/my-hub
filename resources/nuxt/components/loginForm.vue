@@ -53,13 +53,14 @@ export default class LoginForm extends Vue
 
     async login()
     {
+        // We don't know if the password username is valid yet
+        this.submit.setCustomValidity("");
+        
         if (!this.form.checkValidity())
         {
             return;
         }
 
-        // We don't know if the password username is valid yet
-        this.submit.setCustomValidity("");
 
         let token : string | null = await useUserStore().auth(this.emailInput, this.passwordInput);
         if (token)

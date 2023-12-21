@@ -3,5 +3,6 @@ export default interface DefineUser
     username? : string,
     id?: string,
     friends?: DefineUser[],
-    token?: string
+    token?: string,
+    isLoggedIn: boolean
 }

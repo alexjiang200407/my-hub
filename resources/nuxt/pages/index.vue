@@ -15,12 +15,16 @@
 
 <script lang="ts">
 
-import { Vue, Component } from "vue-facing-decorator";
+import { Vue, Component, Watch } from "vue-facing-decorator";
 import Post from "../components/post.vue";
 import { DefinePost } from "../types/post"
 import Navbar from "../components/navbar.vue"
 import { usePostStore } from "../store/postStore"
 import Cookies from "js-cookie"
+import { useUserStore } from "../store/userStore";
+
+
+// let loggedIn : boolean = useUserStore().isLoggedIn;
 
 @Component({ components: { Post, Navbar } })
 export default class PostManager extends Vue 
