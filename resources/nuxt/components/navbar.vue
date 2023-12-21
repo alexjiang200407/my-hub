@@ -1,7 +1,7 @@
 <template>
     <nav class="navbar is-fixed-top" role="navigation" aria-label="main navigation" id="navbar">
         <div class="navbar-brand">
-            <a class="navbar-item" href="/">
+            <a class="navbar-item" :href="loggedIn? '/' : '/login'">
                 <span class="icon" id="myhub-brand">
                     <font-awesome-icon :icon="['fab', 'hubspot']" />
                 </span>
@@ -46,12 +46,23 @@
 import { Vue, Component, Watch } from 'vue-facing-decorator';
 import VueLink from './link.vue';
 import { useUserStore } from '../store/userStore';
+import { storeToRefs } from 'pinia';
+import { ComputedRef } from 'vue-demi';
+
 
 @Component({ components: { VueLink } })
 export default class Navbar extends Vue
 {
     burgerIsOpen : boolean = false;
-    loggedIn : boolean | undefined = useUserStore().isLoggedIn;
+
+    // Reference to user login status
+    loggedIn : ComputedRef<boolean>;
+
+    constructor()
+    {
+        super({}, Vue);
+        ({ isLoggedIn: this.loggedIn } = storeToRefs(useUserStore()));
+    }
 
     mounted()
     {
@@ -68,20 +79,18 @@ export default class Navbar extends Vue
     async logOut()
     {
         let success : boolean = await useUserStore().logOut();
-
-        if (success)
-        {
-            this.loggedIn = false;
-        }
     }
 
     @Watch("loggedIn")
     loggedOut()
     {
-        if (this.loggedIn === false)
+        if (!this.loggedIn)
         {
-            console.log("logged out");
             this.$router.push("/login");
+        }
+        else
+        {
+            this.$router.push("/");
         }
     }
 }

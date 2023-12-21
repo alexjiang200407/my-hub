@@ -14,7 +14,6 @@ export default class VueLink extends Vue
     @Prop() to! : string;
     @Prop() txt! : string;
 
-
     goToLink(event : Event)
     {
         event.preventDefault();

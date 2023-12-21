@@ -25,3 +25,5 @@ Route::group(['prefix' => 'auth'], function () {
       Route::get('user', [AuthController::class, 'user']);
     });
 });
+
+Route::post(uri: '/savepost', action: 'PostsController@save');

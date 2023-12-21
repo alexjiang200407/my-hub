@@ -65,6 +65,8 @@
 import { Vue, Component, Ref, Prop } from 'vue-facing-decorator';
 import { DefinePost } from '../types/post';
 import { usePostStore } from "../store/postStore"
+import { useUserStore } from '../store/userStore';
+import { send } from 'process';
 
 @Component
 export default class Post extends Vue
@@ -89,7 +91,7 @@ export default class Post extends Vue
     }
 
     // Saves the post
-    savePost() 
+    async savePost() 
     {
         // Show prompts if invalid
         if (!this.form.reportValidity())
@@ -104,6 +106,26 @@ export default class Post extends Vue
         this.data.isEdit = false;
 
         // Send data to server
+        try
+        {
+            let sendData = JSON.stringify({
+                title: this.data.title,
+                content: this.data.content,
+                userId: useUserStore().id,
+                tags: this.data.tags,
+            });
+
+            console.log(sendData);
+            await $fetch("http://localhost:8000/api/savepost", {
+                method: "POST",
+                body: sendData
+            });
+        }
+        catch (error)
+        {
+            console.error(error);
+        }
+
 
     }
 

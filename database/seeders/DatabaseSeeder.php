@@ -22,10 +22,11 @@ class DatabaseSeeder extends Seeder
             "password"=> bcrypt("shitytitty"),
         ]);
 
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        \App\Models\User::factory(1)->create([
+            "name"=> "poop",
+            "email"=> "poop@gmail.com",
+            "password"=> bcrypt("poopdoopy"),
+        ]);
 
         Post::factory()->create([
             "userId" => 1
@@ -33,6 +34,10 @@ class DatabaseSeeder extends Seeder
 
         Post::factory()->create([
             "userId" => 1
+        ]);
+
+        Post::factory()->create([
+            "userId" => 2
         ]);
 
         Tag::factory()->create([

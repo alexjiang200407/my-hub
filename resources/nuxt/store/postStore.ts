@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { DefinePost } from "../types/post";
+import { useUserStore } from "./userStore";
 
 
 export interface DefinePostsStore
@@ -34,11 +35,17 @@ export const usePostStore = defineStore({
         {
             this.$state.data = posts;
         },
-        async refreshPosts()
+        async getUserPosts()
         {
+            let id : string | undefined = useUserStore().id;
+
+            if (!id)
+            {
+                return;
+            }
+
             // Get the posts from the server
-            const data : PostAPIData = await $fetch('http://localhost:8000/api/13458/posts');
-            console.log(data)
+            const data : PostAPIData = await $fetch(`http://localhost:8000/api/${id}/posts`);
             this.setPosts(data.posts);
         },
     },

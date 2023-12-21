@@ -3,7 +3,7 @@
     <Navbar />
     <section id="profile">
         <h1 class="title">My Profile</h1>
-        <post v-for="data in store.posts" :data ="data" />
+        <post v-for="data in postStore.posts" :data ="data" />
 
         <button class="is-icon-button is-large is-rounded" id="add-post-button" @click="addPost">
         <span class="icon">
@@ -20,40 +20,28 @@ import Post from "../components/post.vue";
 import { DefinePost } from "../types/post"
 import Navbar from "../components/navbar.vue"
 import { usePostStore } from "../store/postStore"
-import Cookies from "js-cookie"
 import { useUserStore } from "../store/userStore";
 
-
-// let loggedIn : boolean = useUserStore().isLoggedIn;
 
 @Component({ components: { Post, Navbar } })
 export default class PostManager extends Vue 
 {
-    store = usePostStore();
+    postStore = usePostStore();
+    userStore = useUserStore();
 
     async created()
     {
-        let token : string = Cookies.get('accessToken') as string;
-        if (token === undefined)
-        {
-            console.log("Not logged in");
-            this.$router.push("/login");
-        }
-        else
-        {
-            console.log("Logged in ", token);
-        }
-
-        await this.store.refreshPosts();
+        await this.userStore.init();
+        await this.postStore.getUserPosts();
     }
     
     addPost() 
     {
         // TODO
         // Get an id from the server
-        this.store.pushPost({
+        this.postStore.pushPost({
             isEdit: true,
-            id: "fuck me",
+            id: "",
             collapseContent: false
         });
     }
@@ -61,7 +49,7 @@ export default class PostManager extends Vue
     deletePost(toDelete : DefinePost)
     {
         // Remove post from client side
-        this.store.removePost(toDelete);
+        this.postStore.removePost(toDelete);
 
         // Tell database to remove the post as well
     }

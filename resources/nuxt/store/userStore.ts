@@ -26,6 +26,16 @@ export interface RegisterJSONPayload
 {
 }
 
+export interface UserJSONData
+{
+    id : string,
+    name : string,
+    email : string,
+    email_verified_at : string,
+    created_at : string,
+    updated_at : string
+}
+
 
 // Data store for users
 export const useUserStore = defineStore({
@@ -37,6 +47,31 @@ export const useUserStore = defineStore({
         }
     }),
     actions: {
+        async init()
+        {
+            // Get the user from server
+            if (Cookies.get("accessToken") !== undefined)
+            {
+                try 
+                {
+                    let response : UserJSONData = await $fetch("http://localhost:8000/api/auth/user", {
+                        method: "GET",
+                        headers: {
+                            accept: "application/json",
+                            authorization: `Bearer ${this.$state.data?.token}`
+                        }
+                    });
+
+                    this.$state.data.id = response.id;
+                    this.$state.data.username = response.name;
+                }
+                catch (error)
+                {
+                    console.error(error);
+                }
+
+            }
+        },
         async auth(email : string, password : string) : Promise<string | null>
         {
             try
@@ -117,6 +152,7 @@ export const useUserStore = defineStore({
     },
     getters: {
         user: (state) => state.data,
-        isLoggedIn: (state) => state.data?.isLoggedIn
+        isLoggedIn: (state) => state.data?.isLoggedIn,
+        id: (state) => state.data?.id
     }
 });
