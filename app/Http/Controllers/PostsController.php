@@ -6,12 +6,14 @@ use App\Models\Post;
 use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class PostsController extends Controller
 {
-    public function retrieve($userId)
-    {       
-        $posts = DB::table("posts")->where("posts.userId","=", $userId)->get();
+    public function retrieve(Request $request)
+    {
+        $user = $request->user();
+        $posts = DB::table("posts")->where("posts.userId","=", $user->id)->get();
         $output = [];
 
         foreach ($posts as $post) {
@@ -40,18 +42,18 @@ class PostsController extends Controller
 
     public function save(Request $request)
     {
+        $user = $request->user();
         $request->validate([
             'title' => 'required|string',
             'content' => 'string',
             'tags' => 'required|array',
-            'tags.*' => 'string|distinct',
-            'userId' => 'required|integer'
+            'tags.*' => 'string|distinct'
         ]);
 
         $post = new Post([
             'title' => $request->title,
             'content' => $request->content,
-            'userId' => $request->userId
+            'userId' => $user->id
         ]);
 
         if ($post->save())

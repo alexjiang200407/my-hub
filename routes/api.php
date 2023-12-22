@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\PostsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,16 +15,19 @@ use App\Http\Controllers\AuthController;
 |
 */
 
-Route::get(uri: '/{userId}/posts', action: 'PostsController@retrieve');
 
 Route::group(['prefix' => 'auth'], function () {
     Route::post('login', [AuthController::class, 'login']);
     Route::post('register', [AuthController::class, 'register']);
 
-    Route::group(['middleware' => 'auth:sanctum'], function() {
+    Route::group(['middleware' => 'auth:sanctum'], function() { 
+       
       Route::get('logout', [AuthController::class, 'logout']);
       Route::get('user', [AuthController::class, 'user']);
     });
 });
 
-Route::post(uri: '/savepost', action: 'PostsController@save');
+Route::group(['middleware' => 'auth:sanctum'], function() {
+  Route::get('getposts', [PostsController::class, 'retrieve']);
+  Route::post('savepost', [PostsController::class, 'save']);
+});

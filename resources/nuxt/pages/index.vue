@@ -32,7 +32,16 @@ export default class PostManager extends Vue
     async created()
     {
         await this.userStore.init();
-        await this.postStore.getUserPosts();
+
+        // If not logged in go to login page
+        if (this.userStore.isLoggedIn)
+        {
+            await this.postStore.getUserPosts();
+        }
+        else
+        {
+            this.$router.push("/login");
+        }
     }
     
     addPost() 

@@ -45,9 +45,32 @@ export const usePostStore = defineStore({
             }
 
             // Get the posts from the server
-            const data : PostAPIData = await $fetch(`http://localhost:8000/api/${id}/posts`);
+            const data : PostAPIData = await $fetch("http://localhost:8000/api/getposts", {
+                method: "GET",
+                headers: {
+                    accept: "application/json",
+                    authorization: `Bearer ${useUserStore().token}`
+                }
+            });
             this.setPosts(data.posts);
         },
+        async savePost(post : DefinePost)
+        {
+            let sendData = JSON.stringify({
+                title: post.title,
+                content: post.content,
+                tags: post.tags,
+            });
+
+            await $fetch("http://localhost:8000/api/savepost", {
+                method: "POST",
+                headers: {
+                    accept: "application/json",
+                    authorization: `Bearer ${useUserStore().token}`
+                },
+                body: sendData
+            });
+        }
     },
     getters: {
         posts: (state) => state.data

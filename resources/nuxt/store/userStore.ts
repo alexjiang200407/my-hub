@@ -12,7 +12,7 @@ export interface DefineUsersStore
 export interface AuthJSONMsg
 {
     message: string,
-    payload: LoginJSONPayload | RegisterJSONPayload | null
+    payload: LoginJSONPayload
 }
 
 export interface LoginJSONPayload
@@ -20,10 +20,6 @@ export interface LoginJSONPayload
     accessToken : string,
     username : string,
     id : string
-}
-
-export interface RegisterJSONPayload
-{
 }
 
 export interface UserJSONData
@@ -84,15 +80,14 @@ export const useUserStore = defineStore({
                     })
                 });
 
-                let payload : LoginJSONPayload = (response.payload as LoginJSONPayload);
                 this.$state.data = {
-                    token: payload.accessToken,
-                    id: payload.id,
+                    token: response.payload.accessToken,
+                    id: response.payload.id,
                     friends: [],
-                    username: payload.username,
+                    username: response.payload.username,
                     isLoggedIn: true
                 }
-                return payload.accessToken;
+                return response.payload.accessToken;
             }
             catch (error)
             {   
@@ -112,10 +107,6 @@ export const useUserStore = defineStore({
                     })
                 });
 
-                if (response.message !== "Successfully created user!")
-                {
-                    return false;
-                }
 
                 return true;
             }
@@ -135,6 +126,7 @@ export const useUserStore = defineStore({
                         authorization: `Bearer ${this.$state.data?.token}`
                     }
                 });
+                console.log(response);
             }
             catch (error)
             {
@@ -153,6 +145,7 @@ export const useUserStore = defineStore({
     getters: {
         user: (state) => state.data,
         isLoggedIn: (state) => state.data?.isLoggedIn,
-        id: (state) => state.data?.id
+        id: (state) => state.data?.id,
+        token: (state) => state.data?.token
     }
 });

@@ -108,18 +108,7 @@ export default class Post extends Vue
         // Send data to server
         try
         {
-            let sendData = JSON.stringify({
-                title: this.data.title,
-                content: this.data.content,
-                userId: useUserStore().id,
-                tags: this.data.tags,
-            });
-
-            console.log(sendData);
-            await $fetch("http://localhost:8000/api/savepost", {
-                method: "POST",
-                body: sendData
-            });
+            this.store.savePost(this.data);
         }
         catch (error)
         {
