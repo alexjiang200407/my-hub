@@ -41,7 +41,7 @@
             <div class="content">
               <div class="rows">
                   <div class="post-text">
-                      {{ data.content }}
+                      {{ data.content }} {{ data.id }}
                   </div>
                   <div class="rows-is-full">
                       <a href="#">@bulmaio</a>
@@ -65,8 +65,6 @@
 import { Vue, Component, Ref, Prop } from 'vue-facing-decorator';
 import { DefinePost } from '../types/post';
 import { usePostStore } from "../store/postStore"
-import { useUserStore } from '../store/userStore';
-import { send } from 'process';
 
 @Component
 export default class Post extends Vue
@@ -102,20 +100,20 @@ export default class Post extends Vue
         // Update fields
         const date : Date = new Date;
         this.data.timestamp = date.toDateString();
-        this.data.tags = ['herro', 'world'];
+        this.data.tags = ['asdas', 'woraaald'];
         this.data.isEdit = false;
 
-        // Send data to server
-        try
+        // New post
+        if (this.data.id === "")
         {
-            this.store.savePost(this.data);
+            let postId : BigInt = await this.store.createPost(this.data);
+            this.data.id = postId.toString();
         }
-        catch (error)
+        // Update post
+        else
         {
-            console.error(error);
+            await this.store.updatePost(this.data);
         }
-
-
     }
 
     // Edits the post
@@ -126,7 +124,7 @@ export default class Post extends Vue
 
     deletePost()
     {
-        this.store.removePost(this.data);
+        this.store.deletePost(this.data);
     }
 
     changeContentVisibility()

@@ -30,4 +30,6 @@ Route::group(['prefix' => 'auth'], function () {
 Route::group(['middleware' => 'auth:sanctum'], function() {
   Route::get('getposts', [PostsController::class, 'retrieve']);
   Route::post('savepost', [PostsController::class, 'save']);
+  Route::post('deletepost', [PostsController::class, 'delete']);
+  Route::post('updatepost', [PostsController::class, 'update']);
 });

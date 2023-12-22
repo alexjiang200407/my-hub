@@ -14,6 +14,11 @@ export interface PostAPIData
     posts: DefinePost[]
 };
 
+export interface SavePostJSON
+{
+    message : string,
+    postId : BigInt
+}
 
 // Data store for posts
 export const usePostStore = defineStore({
@@ -25,11 +30,6 @@ export const usePostStore = defineStore({
         pushPost(newPost : DefinePost) 
         {
             this.$state.data.push(newPost);
-        },
-        removePost(remove : DefinePost)
-        {
-            const index : number = this.$state.data.indexOf(remove);
-            this.$state.data.splice(index, 1);
         },
         setPosts(posts : DefinePost[])
         {
@@ -54,7 +54,7 @@ export const usePostStore = defineStore({
             });
             this.setPosts(data.posts);
         },
-        async savePost(post : DefinePost)
+        async createPost(post : DefinePost) : Promise<BigInt>
         {
             let sendData = JSON.stringify({
                 title: post.title,
@@ -62,14 +62,78 @@ export const usePostStore = defineStore({
                 tags: post.tags,
             });
 
-            await $fetch("http://localhost:8000/api/savepost", {
-                method: "POST",
-                headers: {
-                    accept: "application/json",
-                    authorization: `Bearer ${useUserStore().token}`
-                },
-                body: sendData
+            try
+            {
+                let response : SavePostJSON = await $fetch("http://localhost:8000/api/savepost", {
+                    method: "POST",
+                    headers: {
+                        accept: "application/json",
+                        authorization: `Bearer ${useUserStore().token}`
+                    },
+                    body: sendData
+                });           
+
+                return response.postId;
+            }
+            catch (error)
+            {
+                console.error(error);
+                return BigInt(0);
+            }
+        },
+        async deletePost(post: DefinePost)
+        {
+            // Remove post from client side
+            const index : number = this.$state.data.indexOf(post);
+            this.$state.data.splice(index, 1);
+
+            // Delete post from server side
+            try
+            {
+                await $fetch("http://localhost:8000/api/deletepost", {
+                    method: "POST",
+                    headers: {
+                        accept: "application/json",
+                        authorization: `Bearer ${useUserStore().token}`
+                    },
+                    body: JSON.stringify({
+                        postId: post.id.toString()
+                    })
+                });
+            }
+            catch (error)
+            {
+                console.error(error);
+            }
+        },
+        async updatePost(post: DefinePost)
+        {
+            let sendData = JSON.stringify({
+                title: post.title,
+                content: post.content,
+                tags: post.tags,
+                postId: post.id.toString()
             });
+
+
+            // Update post from server side
+            try
+            {
+                console.log(sendData);
+                await $fetch("http://localhost:8000/api/updatepost", {
+                    method: "POST",
+                    headers: {
+                        accept: "application/json",
+                        authorization: `Bearer ${useUserStore().token}`
+                    },
+                    body: sendData
+                });
+                console.log("bitch");
+            }
+            catch (error)
+            {
+                console.error(error);
+            }
         }
     },
     getters: {

@@ -46,7 +46,6 @@ export default class PostManager extends Vue
     
     addPost() 
     {
-        // TODO
         // Get an id from the server
         this.postStore.pushPost({
             isEdit: true,
@@ -54,15 +53,6 @@ export default class PostManager extends Vue
             collapseContent: false
         });
     }
-
-    deletePost(toDelete : DefinePost)
-    {
-        // Remove post from client side
-        this.postStore.removePost(toDelete);
-
-        // Tell database to remove the post as well
-    }
-
 }
 </script>
 

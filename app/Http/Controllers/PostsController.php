@@ -52,20 +52,82 @@ class PostsController extends Controller
 
         $post = new Post([
             'title' => $request->title,
-            'content' => $request->content,
+            'content' => defined($request->content)? $request->content : '',
             'userId' => $user->id
         ]);
-
-        if ($post->save())
-        {
-            return response()->json([
-                'message' => 'Successfully created post!',
-                'id' => $post->id
-            ], 201);
-        }
-        else
+        
+        // Add the post to the posts tabel
+        if (!$post->save())
         {
             return response()->json(['message' => 'Provide proper details']);
         }
+
+        foreach ($request->tags as $tag) 
+        {
+            $newTag = new Tag([
+                'postId' => $post->id,
+                'tag' => $tag
+            ]);
+            
+            // Now add the tags to the tag table
+            $newTag->save();
+        }    
+    
+        return response()->json([
+            'message' => 'Successfully created post!',
+            'postId' => $post->id
+        ], 201);
+    }
+
+    public function update(Request $request)
+    {
+        $user = $request->user();
+        $request->validate([
+            'title' => 'required|string',
+            'content' => 'string',
+            'tags' => 'required|array',
+            'tags.*' => 'string|distinct',
+            'postId' => 'required|string'
+        ]);
+
+        $post = Post::find($request->postId)->update([
+            'title' => $request->title,
+            'content' => $request->content
+        ]);
+
+        DB::table('tags')->where('tags.postId', '=', $post->id)->delete();
+        foreach ($request->tags as $tag) 
+        {
+            $newTag = new Tag([
+                'postId' => $post->id,
+                'tag' => $tag
+            ]);
+            
+            // Now add the tags to the tag table
+            $newTag->save();
+        }    
+    
+        return response()->json([
+            'message' => 'Successfully created post!',
+            'postId' => $post->id
+        ], 201);
+    }
+
+    public function delete(Request $request)
+    {
+        $user = $request->user();
+        $request->validate([
+            'postId' => 'required|string'
+        ]);
+      
+        // Delete the post from the table with the correct postId and userId
+        DB::table('posts')
+            ->where('id', '=' , $request->postId)
+            ->where('userId', '=', $user->id)
+            ->delete();
+
+        return response()->json([
+            'message' => 'Successfully deleted post!'
+        ], 201);
     }
 }
