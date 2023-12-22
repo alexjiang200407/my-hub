@@ -90,7 +90,9 @@ class PostsController extends Controller
             'postId' => 'required|string'
         ]);
 
-        $post = Post::find($request->postId)->update([
+        $post = Post::where('id', '=', $request->postId)
+        ->where('userId','=', $user->id)
+        ->update([
             'title' => $request->title,
             'content' => $request->content
         ]);
@@ -108,8 +110,7 @@ class PostsController extends Controller
         }    
     
         return response()->json([
-            'message' => 'Successfully created post!',
-            'postId' => $post->id
+            'message' => 'Successfully updated post!'
         ], 201);
     }
 
@@ -122,9 +123,9 @@ class PostsController extends Controller
       
         // Delete the post from the table with the correct postId and userId
         DB::table('posts')
-            ->where('id', '=' , $request->postId)
-            ->where('userId', '=', $user->id)
-            ->delete();
+        ->where('id', '=' , $request->postId)
+        ->where('userId', '=', $user->id)
+        ->delete();
 
         return response()->json([
             'message' => 'Successfully deleted post!'

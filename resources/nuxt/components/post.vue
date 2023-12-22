@@ -41,7 +41,7 @@
             <div class="content">
               <div class="rows">
                   <div class="post-text">
-                      {{ data.content }} {{ data.id }}
+                      {{ data.content }}
                   </div>
                   <div class="rows-is-full">
                       <a href="#">@bulmaio</a>
