@@ -146,6 +146,7 @@ export const useUserStore = defineStore({
         user: (state) => state.data,
         isLoggedIn: (state) => state.data?.isLoggedIn,
         id: (state) => state.data?.id,
-        token: (state) => state.data?.token
+        token: (state) => state.data?.token,
+        name: (state) => state.data?.username
     }
 });

@@ -97,11 +97,11 @@ class PostsController extends Controller
             'content' => $request->content
         ]);
 
-        DB::table('tags')->where('tags.postId', '=', $post->id)->delete();
+        DB::table('tags')->where('tags.postId', '=', $request->postId)->delete();
         foreach ($request->tags as $tag) 
         {
             $newTag = new Tag([
-                'postId' => $post->id,
+                'postId' => $request->postId,
                 'tag' => $tag
             ]);
             

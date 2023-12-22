@@ -28,9 +28,20 @@
     <!-- Post display -->
     <div v-else class="card post">
         <header class="card-header">
-            <p class="card-header-title">
-                {{ data.title }}
-            </p>
+            <div class="card-header-title">
+                <div class="rows">
+                    <p class="post-title row is-full">{{data.title}}</p>
+    
+                    <div class="row is-full">
+                        <time>{{ getTimeStr(data.timestamp as string) }}</time>
+                        <span class="icon period">
+                            <font-awesome-icon :icon="['fas', 'circle']" />
+                        </span>
+                        <a class="username" href="#">@{{ user.name }}</a>
+                    </div>
+                </div>
+
+            </div>
             <button class="card-header-icon" aria-label="more options">
                 <span class="icon" @click="changeContentVisibility">
                     <font-awesome-icon :icon="['fas', 'angle-down']" />
@@ -39,19 +50,10 @@
         </header>
         <div class="card-content" :class="{ collapse: data.collapseContent }">
             <div class="content">
-              <div class="rows">
-                  <div class="post-text">
-                      {{ data.content }}
-                  </div>
-                  <div class="rows-is-full">
-                      <a href="#">@bulmaio</a>
-                      <a href="#" v-for="tag in data.tags">#{{tag}}</a>
-                  </div>
-                  <div class="rows-is-full">
-                      <time>{{ data.timestamp }}</time>
-                  </div>
-                  </div>
-              </div>
+                <div class="rows">
+                    <div class="post-text" v-html="htmlContent()" />
+                </div>
+            </div>
         </div>
         <footer class="card-footer">
             <a href="#" class="card-footer-item" @click="editPost">Edit</a>
@@ -65,6 +67,7 @@
 import { Vue, Component, Ref, Prop } from 'vue-facing-decorator';
 import { DefinePost } from '../types/post';
 import { usePostStore } from "../store/postStore"
+import { useUserStore } from '../store/userStore';
 
 @Component
 export default class Post extends Vue
@@ -78,6 +81,7 @@ export default class Post extends Vue
     title!: HTMLInputElement;
 
     store = usePostStore();
+    user = useUserStore();
 
     mounted()
     {
@@ -100,7 +104,7 @@ export default class Post extends Vue
         // Update fields
         const date : Date = new Date;
         this.data.timestamp = date.toDateString();
-        this.data.tags = ['asdas', 'woraaald'];
+        this.findTags();
         this.data.isEdit = false;
 
         // New post
@@ -131,6 +135,50 @@ export default class Post extends Vue
     {
         this.data.collapseContent = !this.data.collapseContent;
     }
+
+
+    getTimeStr(timeStr : string) : string
+    {
+        let date = new Date(timeStr);
+        let today = new Date();
+        let months = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ];
+
+        return `${date.getDate()} ${months[date.getMonth()]} ${(date.getFullYear() === today.getFullYear())? '' : date.getFullYear()}`;
+    }
+
+
+    findTags()
+    {
+        // No content
+        if (!this.data.content)
+        {
+            return;
+        }
+
+        // Find tokens
+        let matches : RegExpMatchArray | null = this.data.content.match(/(#[a-z\d-]+)/g);
+
+        // Remove previous tags
+        this.data.tags?.splice(0, this.data.tags.length);
+
+        // Add matches
+        if (matches !== null)
+        {
+            this.data.tags = matches;
+        }
+    }
+
+
+    htmlContent()
+    {
+        // No content
+        if (!this.data.content)
+        {
+            return;
+        }
+
+        return this.data.content.replaceAll(/(#[a-z\d-]+)/g, "<a>$&</a>");
+    }
 }
 </script>
 
@@ -159,6 +207,24 @@ export default class Post extends Vue
     animation: post-create 0.2s ease-out;
 }
 
+.card.post .card-header-title .username
+{
+    font-weight: bold;
+}
+
+.card.post .card-header-title
+{
+    color: #6d7575;
+    font-weight: normal;
+}
+
+.card.post .period
+{
+    font-size: 0.3em;
+    width: 0.3em;
+    margin: 0 1.5em;
+}
+
 .post 
 {
     animation: post-bulge 0.3s ease-out;
@@ -168,6 +234,13 @@ export default class Post extends Vue
 {
     transition: all 0.2s ease-out;
     overflow: hidden;
+}
+
+.card.post .post-title
+{
+    color: black;
+    font-weight: 600;
+    font-size: 1.25em;
 }
 
 .post .post-text
