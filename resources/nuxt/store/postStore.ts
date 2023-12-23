@@ -5,7 +5,8 @@ import { useUserStore } from "./userStore";
 
 export interface DefinePostsStore
 {
-    data: DefinePost[]
+    data: DefinePost[],
+    isInit: boolean
 }
 
 export interface PostAPIData
@@ -24,7 +25,8 @@ export interface SavePostJSON
 export const usePostStore = defineStore({
     id: 'post-store',
     state: () : DefinePostsStore => ({
-        data: []
+        data: [],
+        isInit: false
     }),
     actions: {
         pushPost(newPost : DefinePost) 
@@ -35,7 +37,7 @@ export const usePostStore = defineStore({
         {
             this.$state.data = posts;
         },
-        async getUserPosts()
+        async init()
         {
             let id : string | undefined = useUserStore().id;
 
@@ -44,15 +46,23 @@ export const usePostStore = defineStore({
                 return;
             }
 
-            // Get the posts from the server
-            const data : PostAPIData = await $fetch("http://localhost:8000/api/getposts", {
-                method: "GET",
-                headers: {
-                    accept: "application/json",
-                    authorization: `Bearer ${useUserStore().token}`
-                }
-            });
-            this.setPosts(data.posts);
+            try
+            {
+                // Get the posts from the server
+                const data : PostAPIData = await $fetch("http://localhost:8000/api/getposts", {
+                    method: "GET",
+                    headers: {
+                        accept: "application/json",
+                        authorization: `Bearer ${useUserStore().token}`
+                    }
+                });
+                this.setPosts(data.posts);
+                this.$state.isInit = true;
+            }
+            catch (error)
+            {
+                console.log(error);
+            }
         },
         async createPost(post : DefinePost) : Promise<BigInt>
         {
@@ -144,6 +154,7 @@ export const usePostStore = defineStore({
         }
     },
     getters: {
-        posts: (state) => state.data
+        posts: (state) => state.data,
+        isStoreInit: (state) => state.isInit
     }
 });

@@ -1,5 +1,11 @@
 <template>
-    <nav class="navbar is-fixed-top" role="navigation" aria-label="main navigation" id="navbar">
+    <nav 
+        class="navbar" 
+        :class="getNavbarPosition()" 
+        role="navigation" 
+        aria-label="main navigation" 
+        id="navbar"
+    >
         <div class="navbar-brand">
             <a class="navbar-item" :href="loggedIn? '/' : '/login'">
                 <span class="icon" id="myhub-brand">
@@ -48,12 +54,13 @@ import VueLink from './link.vue';
 import { useUserStore } from '../store/userStore';
 import { storeToRefs } from 'pinia';
 import { ComputedRef } from 'vue-demi';
-
+import { isMobile } from "is-mobile";
 
 @Component({ components: { VueLink } })
 export default class Navbar extends Vue
 {
     burgerIsOpen : boolean = false;
+    isMobile : boolean = isMobile();
 
     // Reference to user login status
     loggedIn : ComputedRef<boolean>;
@@ -67,7 +74,14 @@ export default class Navbar extends Vue
     mounted()
     {
         // Add necessary bulma class to html tag
-        document.getElementsByTagName("html").item(0)?.classList.add("has-navbar-fixed-top");
+        if (this.isMobile)
+        {
+            document.getElementsByTagName("html").item(0)?.classList.add("has-navbar-fixed-bottom");
+        }
+        else
+        {
+            document.getElementsByTagName("html").item(0)?.classList.add("has-navbar-fixed-top");
+        }
     }
 
     burgerToggle()
@@ -93,6 +107,17 @@ export default class Navbar extends Vue
             this.$router.push("/");
         }
     }
+
+
+    getNavbarPosition() : string
+    {
+        if (this.isMobile)
+        {
+            return "is-fixed-bottom";
+        }
+
+        return "is-fixed-top";
+    }
 }
 </script>
 
@@ -112,4 +137,10 @@ export default class Navbar extends Vue
     position: absolute;
     right: 0.5em;
 }
+
+#navbar
+{
+    
+}
+
 </style>

@@ -104,7 +104,6 @@ export default class Post extends Vue
         // New post
         if (this.data.id === "")
         {
-            console.log("herro");
             let postId : BigInt = await this.store.createPost(this.data);
             this.data.id = postId.toString();
         }

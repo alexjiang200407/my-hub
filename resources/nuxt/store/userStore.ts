@@ -5,7 +5,8 @@ import Cookies from "js-cookie";
 
 export interface DefineUsersStore
 {
-    data: DefineUser
+    data: DefineUser,
+    isInit: boolean,
 }
 
 
@@ -40,7 +41,8 @@ export const useUserStore = defineStore({
         data: {
             token: Cookies.get("accessToken"),
             isLoggedIn: Cookies.get("accessToken") !== undefined
-        }
+        },
+        isInit: false
     }),
     actions: {
         async init()
@@ -60,6 +62,7 @@ export const useUserStore = defineStore({
 
                     this.$state.data.id = response.id;
                     this.$state.data.username = response.name;
+                    this.$state.isInit = true;
                 }
                 catch (error)
                 {
@@ -147,6 +150,7 @@ export const useUserStore = defineStore({
         isLoggedIn: (state) => state.data?.isLoggedIn,
         id: (state) => state.data?.id,
         token: (state) => state.data?.token,
-        name: (state) => state.data?.username
+        name: (state) => state.data?.username,
+        isStoreInit: (state) => state.isInit
     }
 });
