@@ -16,6 +16,8 @@ section {
     outline: none;
     padding: 1.5em;
     transition: all 0.2s ease;
+    color: white;
+    background-color: #1fb9f7;
 }
 
 .is-icon-button:hover {

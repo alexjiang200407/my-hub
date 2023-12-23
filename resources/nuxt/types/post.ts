@@ -6,6 +6,5 @@ export interface DefinePost
     isEdit: boolean,
     timestamp?: string,
     content?: string,
-    tags?: string[], 
-    collapseContent: boolean
+    tags?: string[]
 };

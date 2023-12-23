@@ -8,9 +8,9 @@
         <div id="no-posts-prompt" v-else>You do not have any posts.</div>
 
         <button class="is-icon-button is-large is-rounded" id="add-post-button" @click="addPost">
-        <span class="icon">
-            <font-awesome-icon :icon="['fas', 'plus']" />
-        </span>
+            <span class="icon">
+                <font-awesome-icon :icon="['fas', 'plus']" />
+            </span>
         </button>
     </section>
 </template>
@@ -55,11 +55,11 @@ export default class PostManager extends Vue
             return;
         }
 
-        // Get an id from the server
+        // id of "" indicates edit
         this.postStore.pushPost({
             isEdit: true,
             id: "",
-            collapseContent: false
+            tags: []
         });
     }
 }

@@ -30,25 +30,19 @@
         <header class="card-header">
             <div class="card-header-title">
                 <div class="rows">
-                    <p class="post-title row is-full">{{data.title}}</p>
+                    <p class="row is-full post-title">
+                        {{data.title}}
+                    </p>
     
                     <div class="row is-full">
                         <time>{{ getTimeStr(data.timestamp as string) }}</time>
-                        <span class="icon period">
-                            <font-awesome-icon :icon="['fas', 'circle']" />
-                        </span>
                         <a class="username" href="#">@{{ user.name }}</a>
                     </div>
                 </div>
-
             </div>
-            <button class="card-header-icon" aria-label="more options">
-                <span class="icon" @click="changeContentVisibility">
-                    <font-awesome-icon :icon="['fas', 'angle-down']" />
-                </span>
-            </button>
+
         </header>
-        <div class="card-content" :class="{ collapse: data.collapseContent }">
+        <div class="card-content">
             <div class="content">
                 <div class="rows">
                     <div class="post-text" v-html="htmlContent()" />
@@ -110,6 +104,7 @@ export default class Post extends Vue
         // New post
         if (this.data.id === "")
         {
+            console.log("herro");
             let postId : BigInt = await this.store.createPost(this.data);
             this.data.id = postId.toString();
         }
@@ -130,12 +125,6 @@ export default class Post extends Vue
     {
         this.store.deletePost(this.data);
     }
-
-    changeContentVisibility()
-    {
-        this.data.collapseContent = !this.data.collapseContent;
-    }
-
 
     getTimeStr(timeStr : string) : string
     {
@@ -161,10 +150,14 @@ export default class Post extends Vue
         // Remove previous tags
         this.data.tags?.splice(0, this.data.tags.length);
 
+        // Remove duplicates
+
         // Add matches
         if (matches !== null)
         {
-            this.data.tags = matches;
+            this.data.tags = matches.map((value : string) => {
+                return value.slice(1);
+            });
         }
     }
 
@@ -216,13 +209,23 @@ export default class Post extends Vue
 {
     color: #6d7575;
     font-weight: normal;
+    max-width: 100%;
 }
 
-.card.post .period
+.card.post .card-header
 {
-    font-size: 0.3em;
-    width: 0.3em;
-    margin: 0 1.5em;
+    max-width: 100%;
+}
+
+.card.post .card-header-title .rows
+{
+    width: 100%;
+}
+
+.card.post .card-header-title .rows .row
+{
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .post 

@@ -28,7 +28,7 @@
             <!-- If logged in -->
             <div class="navbar-start" v-if="loggedIn">
                 <VueLink class="navbar-item" :to="'/'" :txt="'Profile'" />
-                <VueLink class="navbar-item" :to="'/'" :txt="'Explore'" />
+                <VueLink class="navbar-item" :to="'/explore'" :txt="'Explore'" />
                 <VueLink class="navbar-item" :txt="'Logout'" @click="logOut"/>
             </div>
 

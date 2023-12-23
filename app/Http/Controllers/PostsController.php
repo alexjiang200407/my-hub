@@ -46,13 +46,15 @@ class PostsController extends Controller
         $request->validate([
             'title' => 'required|string',
             'content' => 'string',
-            'tags' => 'required|array',
+            'tags' => 'array',
             'tags.*' => 'string|distinct'
         ]);
+        
+        $content = $request->content;
 
         $post = new Post([
             'title' => $request->title,
-            'content' => defined($request->content)? $request->content : '',
+            'content' => (!empty($request->content))? $content : '',
             'userId' => $user->id
         ]);
         
@@ -62,16 +64,20 @@ class PostsController extends Controller
             return response()->json(['message' => 'Provide proper details']);
         }
 
-        foreach ($request->tags as $tag) 
+        if (count($request->tags) > 0)
         {
-            $newTag = new Tag([
-                'postId' => $post->id,
-                'tag' => $tag
-            ]);
-            
-            // Now add the tags to the tag table
-            $newTag->save();
-        }    
+            foreach ($request->tags as $tag) 
+            {
+                $newTag = new Tag([
+                    'postId' => $post->id,
+                    'tag' => $tag
+                ]);
+                
+                // Now add the tags to the tag table
+                $newTag->save();
+            }    
+        }
+
     
         return response()->json([
             'message' => 'Successfully created post!',
@@ -85,30 +91,34 @@ class PostsController extends Controller
         $request->validate([
             'title' => 'required|string',
             'content' => 'string',
-            'tags' => 'required|array',
+            'tags' => 'array',
             'tags.*' => 'string|distinct',
             'postId' => 'required|string'
         ]);
 
+        $content = $request->content;
         $post = Post::where('id', '=', $request->postId)
         ->where('userId','=', $user->id)
         ->update([
             'title' => $request->title,
-            'content' => $request->content
+            'content' => (!empty($request->content))? $content : ''
         ]);
 
-        DB::table('tags')->where('tags.postId', '=', $request->postId)->delete();
-        foreach ($request->tags as $tag) 
+        if (count($request->tags) > 0)
         {
-            $newTag = new Tag([
-                'postId' => $request->postId,
-                'tag' => $tag
-            ]);
-            
-            // Now add the tags to the tag table
-            $newTag->save();
-        }    
-    
+            DB::table('tags')->where('tags.postId', '=', $request->postId)->delete();
+            foreach ($request->tags as $tag) 
+            {
+                $newTag = new Tag([
+                    'postId' => $request->postId,
+                    'tag' => $tag
+                ]);
+                
+                // Now add the tags to the tag table
+                $newTag->save();
+            }    
+        }
+
         return response()->json([
             'message' => 'Successfully updated post!'
         ], 201);

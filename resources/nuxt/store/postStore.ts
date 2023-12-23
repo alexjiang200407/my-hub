@@ -62,6 +62,8 @@ export const usePostStore = defineStore({
                 tags: post.tags,
             });
 
+            console.log(sendData);
+
             try
             {
                 let response : SavePostJSON = await $fetch("http://localhost:8000/api/savepost", {
@@ -86,6 +88,12 @@ export const usePostStore = defineStore({
             // Remove post from client side
             const index : number = this.$state.data.indexOf(post);
             this.$state.data.splice(index, 1);
+
+            // Hasn't added post to server yet do not need to delete
+            if (post.id === "")
+            {
+                return;
+            }
 
             // Delete post from server side
             try
@@ -122,13 +130,12 @@ export const usePostStore = defineStore({
                 console.log(sendData);
                 await $fetch("http://localhost:8000/api/updatepost", {
                     method: "POST",
-                    headers: {
+                    headers: {  
                         accept: "application/json",
                         authorization: `Bearer ${useUserStore().token}`
                     },
                     body: sendData
                 });
-                console.log("bitch");
             }
             catch (error)
             {
