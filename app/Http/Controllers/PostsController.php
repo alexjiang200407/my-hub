@@ -25,12 +25,9 @@ class PostsController extends Controller
                 "timestamp" => $temp->created_at,
                 "tags" => []
             ];
-            $tags = DB::table("tags")->where("tags.postId","=", $post->id)->get();
-            
-            // Set the tags
-            foreach ($tags as $tag) {
-                $post_data["tags"][] = $tag->tag;
-            }
+
+            $post_data["tags"] = PostsController::getTags($post->id);
+
             $output[] = $post_data;
         }
         return [
@@ -140,5 +137,59 @@ class PostsController extends Controller
         return response()->json([
             'message' => 'Successfully deleted post!'
         ], 201);
+    }
+
+    public static function getTags($postId)
+    {
+        $tagsArr = [];
+        $tags = DB::table("tags")->where("tags.postId","=", $postId)->get();
+        foreach ($tags as $tag) {
+            $tagsArr[] = $tag->tag;
+        }
+
+        return $tagsArr;
+    }
+
+
+    public function filter(Request $request)
+    {
+        $request->validate([
+            'tags' => 'array',
+            'tags.*' => 'string|distinct',
+        ]);
+
+        if (count($request->tags) <= 0)
+        {
+            return response()->json([
+                'postC'=> 0,
+                'posts' => []
+            ]);
+        }
+
+        $posts = [];
+        
+        $matches = DB::table('tags')
+        ->whereIn('tag', $request->tags)
+        ->join('posts', 'tags.postId', '=', 'posts.id')
+        ->join('users', 'users.id', '=', 'posts.userId')
+        ->get();
+
+        
+        foreach ($matches as $match)
+        {
+            $tagsArr = PostsController::getTags($match->postId);
+
+            $posts[] = [
+                'user' => $match->name,
+                'id' => $match->postId,
+                'tags' => $tagsArr,
+                'timestamp' => $match->created_at,
+                'title' => $match->title,
+                'content' => $match->content
+            ];
+        }
+
+        return $posts;
+
     }
 }

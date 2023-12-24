@@ -54,6 +54,12 @@ body {
 }
 
 
+section
+{
+    margin-top: 2em;
+    margin-bottom: 5em;
+}
+
 @keyframes fade-in 
 {
     0% {

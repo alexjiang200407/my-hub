@@ -79,7 +79,7 @@ export default class PostManager extends Vue
 #add-post-button 
 {
     position: fixed;
-    bottom: 3em;
+    bottom: 5em;
     right: 5vh;
     border: none;
 }
@@ -87,7 +87,6 @@ export default class PostManager extends Vue
 #profile 
 {
     width: 40em;
-    margin-top: 2em;
     height: calc(100% - 2em);
 }
 

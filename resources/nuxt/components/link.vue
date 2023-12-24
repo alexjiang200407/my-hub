@@ -1,6 +1,6 @@
 <template>
-    <a v-if="to" :href="to" @click="goToLink">{{ txt }}</a>
-    <a v-else>{{ txt }}</a>
+    <a v-if="to" :href="to" @click="goToLink"><slot>{{ txt }}</slot></a>
+    <a v-else><slot>{{ txt }}</slot></a>
 </template>
 
 
@@ -12,7 +12,7 @@ import { Vue, Component, Prop } from 'vue-facing-decorator';
 export default class VueLink extends Vue
 {
     @Prop() to! : string;
-    @Prop() txt! : string;
+    @Prop() txt! : string | HTMLElement;
 
     goToLink(event : Event)
     {

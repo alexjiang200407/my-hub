@@ -36,7 +36,7 @@
     
                     <div class="row is-full">
                         <time>{{ getTimeStr(data.timestamp as string) }}</time>
-                        <a class="username" href="#">@{{ user.name }}</a>
+                        <a class="username" href="#">@{{ data.posterName? data.posterName : user.name }}</a>
                     </div>
                 </div>
             </div>
@@ -150,11 +150,12 @@ export default class Post extends Vue
         this.data.tags?.splice(0, this.data.tags.length);
 
         // Remove duplicates
+        let uniqMatches = Array.from(new Set(matches));
 
         // Add matches
         if (matches !== null)
         {
-            this.data.tags = matches.map((value : string) => {
+            this.data.tags = uniqMatches.map((value : string) => {
                 return value.slice(1);
             });
         }

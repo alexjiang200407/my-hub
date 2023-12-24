@@ -4,32 +4,46 @@
         :class="getNavbarPosition()" 
         role="navigation" 
         aria-label="main navigation" 
-        id="navbar"
+        :id="!isMobile? 'navbar' : ''"
     >
-        <div class="navbar-brand">
-            <a class="navbar-item" :href="loggedIn? '/' : '/login'">
+        <div v-if="isMobile">
+            <div class="navbar-menu is-active" id="navbar-menu-mobile">
+                <VueLink class="navbar-item" 
+                    :to="'/'"
+                >
+                    <span class="icon">
+                        <font-awesome-icon :icon="['fas', 'user']" />
+                    </span>
+                </VueLink>
+                <VueLink 
+                    class="navbar-item"
+                    :to="'explore'"
+                >
+                    <span class="icon">
+                        <font-awesome-icon :icon="['fas', 'compass']" />
+                    </span>
+                </VueLink>
+                <VueLink 
+                    class="navbar-item"
+                    @click="logOut"
+                >
+                    <span class="icon">
+                        <font-awesome-icon :icon="['fas', 'right-from-bracket']" />
+                    </span>
+                </VueLink>
+            </div>
+        </div>
+        <div v-if="!isMobile" class="navbar-brand">
+            <VueLink class="navbar-item" :to="loggedIn? '/' : '/login'">
                 <span class="icon" id="myhub-brand">
                     <font-awesome-icon :icon="['fab', 'hubspot']" />
                 </span>
-            </a>
-            <a 
-                role="button" 
-                class="navbar-burger" 
-                :class="{ 'is-active': burgerIsOpen }"
-                aria-label="menu" 
-                aria-expanded="false" 
-                data-target="navbar-menu" 
-                @click="burgerToggle"
-            >
-                <span aria-hidden="true"></span>
-                <span aria-hidden="true"></span>
-                <span aria-hidden="true"></span>
-            </a>
+            </VueLink>
         </div>
         <div 
             id="navbar-menu" 
             class="navbar-menu"
-            :class="{ 'is-active': burgerIsOpen }"
+            v-if="!isMobile"
         >
             <!-- If logged in -->
             <div class="navbar-start" v-if="loggedIn">
@@ -44,7 +58,6 @@
             </div>  
             <div class="navbar-end"></div>
         </div>
-
     </nav>
 </template>
 
@@ -132,15 +145,16 @@ export default class Navbar extends Vue
     font-size: 3em;
     width: 1.2em;
 }
-#navbar-menu.is-active 
+
+#navbar-menu-mobile
 {
-    position: absolute;
-    right: 0.5em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.75em;
+    gap: 0.75em;
+    padding: 0;
 }
 
-#navbar
-{
-    
-}
 
 </style>

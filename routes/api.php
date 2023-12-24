@@ -27,9 +27,13 @@ Route::group(['prefix' => 'auth'], function () {
     });
 });
 
+// Requires authorization
 Route::group(['middleware' => 'auth:sanctum'], function() {
-  Route::get('getposts', [PostsController::class, 'retrieve']);
-  Route::post('savepost', [PostsController::class, 'save']);
-  Route::post('deletepost', [PostsController::class, 'delete']);
-  Route::post('updatepost', [PostsController::class, 'update']);
+  Route::get('user/getposts', [PostsController::class, 'retrieve']);
+  Route::post('user/savepost', [PostsController::class, 'save']);
+  Route::post('user/deletepost', [PostsController::class, 'delete']);
+  Route::post('user/updatepost', [PostsController::class, 'update']);
 });
+
+
+Route::post('posts/filter', [PostsController::class, 'filter']);

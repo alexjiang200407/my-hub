@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { DefinePost } from "../types/post";
+import { DefinePost, PostAPIData } from "../types/post";
 import { useUserStore } from "./userStore";
 
 
@@ -8,12 +8,6 @@ export interface DefinePostsStore
     data: DefinePost[],
     isInit: boolean
 }
-
-export interface PostAPIData
-{
-    postC: number,
-    posts: DefinePost[]
-};
 
 export interface SavePostJSON
 {
@@ -49,13 +43,14 @@ export const usePostStore = defineStore({
             try
             {
                 // Get the posts from the server
-                const data : PostAPIData = await $fetch("http://localhost:8000/api/getposts", {
+                const data : PostAPIData = await $fetch("http://localhost:8000/api/user/getposts", {
                     method: "GET",
                     headers: {
                         accept: "application/json",
                         authorization: `Bearer ${useUserStore().token}`
                     }
                 });
+                console.log(data.posts);
                 this.setPosts(data.posts);
                 this.$state.isInit = true;
             }
@@ -76,7 +71,7 @@ export const usePostStore = defineStore({
 
             try
             {
-                let response : SavePostJSON = await $fetch("http://localhost:8000/api/savepost", {
+                let response : SavePostJSON = await $fetch("http://localhost:8000/api/user/savepost", {
                     method: "POST",
                     headers: {
                         accept: "application/json",
@@ -108,7 +103,7 @@ export const usePostStore = defineStore({
             // Delete post from server side
             try
             {
-                await $fetch("http://localhost:8000/api/deletepost", {
+                await $fetch("http://localhost:8000/api/user/deletepost", {
                     method: "POST",
                     headers: {
                         accept: "application/json",
@@ -138,7 +133,7 @@ export const usePostStore = defineStore({
             try
             {
                 console.log(sendData);
-                await $fetch("http://localhost:8000/api/updatepost", {
+                await $fetch("http://localhost:8000/api/user/updatepost", {
                     method: "POST",
                     headers: {  
                         accept: "application/json",

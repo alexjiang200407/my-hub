@@ -10,12 +10,21 @@
             <div class="row is-full">
                 <div class="field has-addons">
                     <div class="control">
-                      <input class="input" type="text" :placeholder="`${searchForStr[searchTab]}`">
+                        <input 
+                            class="input" 
+                            type="text" 
+                            v-model="searchInputStr"
+                            ref="searchbar"
+                            :placeholder="`${searchForStr[searchTab]}`"
+                        >
                     </div>
                     <div class="control">
-                      <a class="button is-info">
+                      <button 
+                        class="button is-info"
+                        @click="handleSearch"
+                      >
                         Search
-                      </a>
+                      </button>
                     </div>
                   </div>
             </div>
@@ -24,9 +33,10 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-facing-decorator";
+import { Component, Ref, Vue } from "vue-facing-decorator";
 import Navbar from "../components/navbar.vue"
 import Tabs, { TabProps } from "../components/tabs.vue";
+import { useExploreStore } from "../store/exploreStore"
 
 enum searchFor
 {
@@ -40,6 +50,7 @@ export default class ExplorePage extends Vue
 {
     searchTab : searchFor = searchFor.TAG;
     searchForStr : string[] = ["Search tags", "Find a user"];
+    searchInputStr : string = "";
 
     tabProps : TabProps = {
         tabs: [
@@ -53,10 +64,30 @@ export default class ExplorePage extends Vue
         selected: 0
     };
 
+    @Ref("searchbar")
+    searchBar!: HTMLInputElement;
+
+    store = useExploreStore();
+
     tabChanged(tabIndex : number)
     {
         this.searchTab = tabIndex as searchFor;
     }
+
+    async handleSearch()
+    {
+        switch (this.searchTab)
+        {
+            case searchFor.TAG: await this.store.searchTags(this.searchInputStr); break;
+            case searchFor.USER: break;
+        }
+
+        // Clear search input
+        this.searchBar.value = "";
+        this.searchInputStr = "";
+    }
+
+
 }
 
 </script>
