@@ -180,7 +180,7 @@ class PostsController extends Controller
             $tagsArr = PostsController::getTags($match->postId);
 
             $posts[] = [
-                'user' => $match->name,
+                'posterName' => $match->name,
                 'id' => $match->postId,
                 'tags' => $tagsArr,
                 'timestamp' => $match->created_at,
@@ -189,7 +189,10 @@ class PostsController extends Controller
             ];
         }
 
-        return $posts;
+        return [
+            "posts" => $posts,
+            "postC" => $matches->count()
+        ];
 
     }
 }

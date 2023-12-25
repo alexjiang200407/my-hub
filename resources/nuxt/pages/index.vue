@@ -4,7 +4,7 @@
     <section id="profile">
         <h1 class="title">My Profile</h1>
         <Loader v-if="!loaded" />
-        <post v-else-if="postStore.posts.length" v-for="data in postStore.posts" :data ="data" />
+        <UserPost v-else-if="postStore.posts.length" v-for="data in postStore.posts" :data ="data" />
         <div id="no-posts-prompt" v-else>You do not have any posts.</div>
 
         <button class="is-icon-button is-large is-rounded" id="add-post-button" @click="addPost">
@@ -18,14 +18,14 @@
 <script lang="ts">
 
 import { Vue, Component, Watch } from "vue-facing-decorator";
-import Post from "../components/post.vue";
 import Navbar from "../components/navbar.vue"
 import { usePostStore } from "../store/postStore"
 import { useUserStore } from "../store/userStore";
 import Loader from "../components/loader.vue";
+import UserPost from "../components/userPost.vue";
 
 
-@Component({ components: { Post, Navbar } })
+@Component({ components: { UserPost, Navbar } })
 export default class PostManager extends Vue 
 {
     postStore = usePostStore();

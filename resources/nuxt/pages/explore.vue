@@ -1,33 +1,36 @@
 <template>
 <section id="explore">
     <Navbar />
-        <div id="searchbar" class="rows">
-            <Tabs
-                class="row is-full"
-                :data = "tabProps"
-                @onTabChanged="tabChanged($event)"
-            />
-            <div class="row is-full">
-                <div class="field has-addons">
-                    <div class="control">
-                        <input 
-                            class="input" 
-                            type="text" 
-                            v-model="searchInputStr"
-                            ref="searchbar"
-                            :placeholder="`${searchForStr[searchTab]}`"
-                        >
-                    </div>
-                    <div class="control">
-                      <button 
-                        class="button is-info"
-                        @click="handleSearch"
-                      >
-                        Search
-                      </button>
-                    </div>
-                  </div>
-            </div>
+    <div id="searchbar" class="rows">
+        <Tabs
+            class="row is-full"
+            :data = "tabProps"
+            @onTabChanged="tabChanged($event)"
+        />
+        <div class="row is-full">
+            <div class="field has-addons">
+                <div class="control">
+                    <input 
+                        class="input" 
+                        type="text" 
+                        v-model="searchInputStr"
+                        ref="searchbar"
+                        :placeholder="`${searchForStr[searchTab]}`"
+                    >
+                </div>
+                <div class="control">
+                    <button 
+                    class="button is-info"
+                    @click="handleSearch"
+                    >
+                    Search
+                    </button>
+                </div>
+                </div>
+        </div>
+    </div>
+    <div>
+        <Post v-for="data in display" :data="data"/>
     </div>
 </section>
 </template>
@@ -37,6 +40,8 @@ import { Component, Ref, Vue } from "vue-facing-decorator";
 import Navbar from "../components/navbar.vue"
 import Tabs, { TabProps } from "../components/tabs.vue";
 import { useExploreStore } from "../store/exploreStore"
+import Post from "../components/post.vue";
+import { DefinePost } from "../types/post";
 
 enum searchFor
 {
@@ -45,7 +50,7 @@ enum searchFor
 }
 
 
-@Component({})
+@Component({ components: { Post } })
 export default class ExplorePage extends Vue
 {
     searchTab : searchFor = searchFor.TAG;
@@ -68,6 +73,7 @@ export default class ExplorePage extends Vue
     searchBar!: HTMLInputElement;
 
     store = useExploreStore();
+    display : DefinePost[] = [];
 
     tabChanged(tabIndex : number)
     {
@@ -81,6 +87,7 @@ export default class ExplorePage extends Vue
             case searchFor.TAG: await this.store.searchTags(this.searchInputStr); break;
             case searchFor.USER: break;
         }
+        this.display = this.store.postDisplay;
 
         // Clear search input
         this.searchBar.value = "";
