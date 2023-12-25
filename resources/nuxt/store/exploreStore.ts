@@ -14,9 +14,14 @@ export const useExploreStore = defineStore({
         postDisplay: []
     }),
     actions: {
-        async searchTags(tagsStr : string)
+        async searchTags(tagsStr : string) : Promise<string[] | null>
         {
             let tags : RegExpMatchArray | null = tagsStr.match(/\b(\w+)\b/g);
+
+            if (!tags)
+            {
+                return [];
+            }
 
             try
             {
@@ -36,10 +41,13 @@ export const useExploreStore = defineStore({
 
                 this.setPostDisplay(response.posts);
                 console.log(this.display);
+
+                return tags as string[];
             }
             catch (error)
             {
                 console.error(error);
+                return null;
             }
         },
         setPostDisplay(display : DefinePost[])

@@ -32,35 +32,6 @@
             <a href="#" class="card-footer-item" @click="deletePost">Delete</a>
         </footer>
     </Post>
-    <!-- <div v-else class="card post">
-        <header class="card-header">
-            <div class="card-header-title">
-                <div class="rows">
-                    <p class="row is-full post-title">
-                        {{data.title}}
-                    </p>
-    
-                    <div class="row is-full">
-                        <time>{{ getTimeStr(data.timestamp as string) }}</time>
-                        <a class="username" href="#">@{{ data.posterName? data.posterName : user.name }}</a>
-                    </div>
-                </div>
-            </div>
-
-        </header>
-        <div class="card-content">
-            <div class="content">
-                <div class="rows">
-                    <div class="post-text" v-html="htmlContent()" />
-                </div>
-            </div>
-        </div>
-        <footer class="card-footer">
-            <a href="#" class="card-footer-item" @click="editPost">Edit</a>
-            <a href="#" class="card-footer-item" @click="deletePost">Delete</a>
-        </footer>
-    </div> -->
-
 </template>
 
 <script lang="ts">
