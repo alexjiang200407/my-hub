@@ -43,7 +43,7 @@ export const usePostStore = defineStore({
             try
             {
                 // Get the posts from the server
-                const data : PostAPIData = await $fetch("http://localhost:8000/api/user/getposts", {
+                const data : PostAPIData = await $fetch("http://myhub.my.to/api/user/getposts", {
                     method: "GET",
                     headers: {
                         accept: "application/json",
@@ -71,7 +71,7 @@ export const usePostStore = defineStore({
 
             try
             {
-                let response : SavePostJSON = await $fetch("http://localhost:8000/api/user/savepost", {
+                let response : SavePostJSON = await $fetch("http://myhub.my.to/api/user/savepost", {
                     method: "POST",
                     headers: {
                         accept: "application/json",
@@ -103,7 +103,7 @@ export const usePostStore = defineStore({
             // Delete post from server side
             try
             {
-                await $fetch("http://localhost:8000/api/user/deletepost", {
+                await $fetch("http://myhub.my.to/api/user/deletepost", {
                     method: "POST",
                     headers: {
                         accept: "application/json",
@@ -133,7 +133,7 @@ export const usePostStore = defineStore({
             try
             {
                 console.log(sendData);
-                await $fetch("http://localhost:8000/api/user/updatepost", {
+                await $fetch("http://myhub.my.to/user/updatepost", {
                     method: "POST",
                     headers: {  
                         accept: "application/json",

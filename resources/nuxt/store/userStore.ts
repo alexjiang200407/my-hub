@@ -52,7 +52,7 @@ export const useUserStore = defineStore({
             {
                 try 
                 {
-                    let response : UserJSONData = await $fetch("http://localhost:8000/api/auth/user", {
+                    let response : UserJSONData = await $fetch("http://myhub.my.to/api/auth/user", {
                         method: "GET",
                         headers: {
                             accept: "application/json",
@@ -75,7 +75,7 @@ export const useUserStore = defineStore({
         {
             try
             {
-                let response : AuthJSONMsg = await $fetch("http://localhost:8000/api/auth/login", {
+                let response : AuthJSONMsg = await $fetch("http://myhub.my.to/api/auth/login", {
                     method: "POST",
                     body: JSON.stringify({
                         email: email,
@@ -101,7 +101,7 @@ export const useUserStore = defineStore({
         {
             try
             {
-                let response : AuthJSONMsg = await $fetch("http://localhost:8000/api/auth/register", {
+                let response : AuthJSONMsg = await $fetch("http://myhub.my.to/api/auth/register", {
                     method: "POST",
                     body: JSON.stringify({
                         name: username,
@@ -122,7 +122,7 @@ export const useUserStore = defineStore({
         {
             try
             {
-                let response : AuthJSONMsg = await $fetch("http://localhost:8000/api/auth/logout", {
+                let response : AuthJSONMsg = await $fetch("http://myhub.my.to/api/auth/logout", {
                     method: "GET",
                     headers: {
                         accept: "application/json",

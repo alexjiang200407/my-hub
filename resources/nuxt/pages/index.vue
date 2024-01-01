@@ -17,7 +17,7 @@
 
 <script lang="ts">
 
-import { Vue, Component, Watch } from "vue-facing-decorator";
+import { Vue, Component } from "vue-facing-decorator";
 import Navbar from "../components/navbar.vue"
 import { usePostStore } from "../store/postStore"
 import { useUserStore } from "../store/userStore";

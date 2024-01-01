@@ -26,7 +26,7 @@ export const useExploreStore = defineStore({
             try
             {
                 let response : PostAPIData = await $fetch(
-                    "http://localhost:8000/api/posts/filter", {
+                    "http://myhub.my.to/api/posts/filter", {
                         method: "POST",
                         headers: {
                             accept: "application/json"
